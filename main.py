@@ -8,11 +8,7 @@ from threading import Thread
 from dotenv import dotenv_values
 
 from params import params
-from src import (
-    data_holders,
-    receive_traces,
-    aws
-)
+from src import data_holders, receive_traces, aws
 
 __author__ = "Vaclav Kuna"
 __copyright__ = ""
