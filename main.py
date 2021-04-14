@@ -25,10 +25,10 @@ def main():
     # Create a dictionary of aws credentials from enviroment variables
 
     aws_cred = {
-        'AWS_REGION': os.environ['AWS_REGION'],
-        'ACCESS_KEY_ID': os.environ['ACCESS_KEY_ID'],
-        'SECRET_ACCESS_KEY': os.environ['SECRET_ACCESS_KEY'],
-        'BUCKET_NAME': os.environ['BUCKET_NAME']
+        "AWS_REGION": os.environ["AWS_REGION"],
+        "ACCESS_KEY_ID": os.environ["ACCESS_KEY_ID"],
+        "SECRET_ACCESS_KEY": os.environ["SECRET_ACCESS_KEY"],
+        "BUCKET_NAME": os.environ["BUCKET_NAME"],
     }
 
     # Create a RawData DataFrame.
