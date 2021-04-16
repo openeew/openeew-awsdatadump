@@ -13,5 +13,5 @@ To install and run black linter:
 
 ```
 pip install black
-python3 black /path/to/file
+black /path/to/file
 ```
