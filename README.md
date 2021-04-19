@@ -43,4 +43,14 @@ docker run \
   --env-file .env \
   --name aws-data-dump \
   aws-data-dump:dev
+=======
+## **Development**
+
+This repository is written in Python and runs [Black](https://github.com/psf/black) on all Pull Request.
+
+To install and run black linter:
+
+```
+pip install black
+black /path/to/file
 ```
