@@ -25,7 +25,7 @@ To build an aws-data-dump docker image, from the root directory run the followin
 docker build --tag aws-data-dump:dev .
 ```
 
-Create a .env file that contains details of your your AWS bucket.
+Create a .env file that contains details of your AWS bucket.
 
 ```
 AWS_REGION=
@@ -43,7 +43,7 @@ docker run \
   --env-file .env \
   --name aws-data-dump \
   aws-data-dump:dev
-=======
+```
 ## **Development**
 
 This repository is written in Python and runs [Black](https://github.com/psf/black) on all Pull Request.
