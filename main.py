@@ -35,12 +35,12 @@ def main():
     traces = data_holders.Traces()
 
     # We create and start our traces update worker
-    stream = receive_traces.DataReceiver(traces)
+    stream = receive_traces.DataReceiver(df_holder=traces, params=params)
     receive_data_process = Thread(target=stream.run)
     receive_data_process.start()
 
     # We create and start detection worker
-    compute = aws.AWSdump(traces=traces, params=params, aws_cred=aws_cred)
+    compute = aws.AWSdump(traces=traces, params=params)
     aws_process = Thread(target=compute.run)
     aws_process.start()
 

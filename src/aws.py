@@ -8,33 +8,24 @@ import datetime
 import math
 import time
 import json
-import sys
 from obspy import Stream, Trace, UTCDateTime
 from glob import glob
 import ast
 from warnings import warn
+import os
 
 import logging
 import boto3
 from botocore.exceptions import ClientError
 
-__author__ = "Vaclav Kuna"
-__copyright__ = ""
-__license__ = ""
-__version__ = "1.0"
-__maintainer__ = "Vaclav Kuna"
-__email__ = "kuna.vaclav@gmail.com"
-__status__ = ""
-
 
 class AWSdump:
     """This class handles all the detection procedures"""
 
-    def __init__(self, traces, params, aws_cred) -> None:
+    def __init__(self, traces, params) -> None:
         super().__init__()
         self.traces = traces
         self.params = params
-        self.aws_cred = aws_cred
 
     def dump_data(self):
 
@@ -71,27 +62,28 @@ class AWSdump:
                     mseed_s3_path,
                 ) = self.get_name_and_path(trace)
 
-                # save json file locally
-                self.save_to_jsonl(trace, json_local_path)
+                a = time.time()
+                if self.params["export_json"]:
+                    print(device_id)
+                    # save json file locally
+                    self.save_to_jsonl(trace, json_local_path)
+                    # save json to aws
+                    self.upload_file_aws(json_local_path, json_s3_path)
+                b = time.time()
 
-                # convert json to mseed
-                self.json2mseed(json_local_path, mseed_local_path)
+                if self.params["export_mseed"]:
+                    # convert json to mseed
+                    self.json2mseed(json_local_path, mseed_local_path)
+                    # save mseed to aws
+                    self.upload_file_aws(mseed_local_path, mseed_s3_path)
 
-                # save json to aws
-                self.upload_file_aws(json_local_path, json_s3_path)
-                self.upload_file_aws(mseed_local_path, mseed_s3_path)
+                c = time.time()
 
+                print((c - b, b - a))
                 # DROP THE DATA FROM THE DATAFRAME
                 self.traces.data = self.traces.data[
                     self.traces.data["device_id"] != device_id
                 ]
-
-        # Print the current size of the data buffer
-        print(
-            "▫️ Size of data in the buffer "
-            + str(int(sys.getsizeof(self.traces.data) / 1e5) / 10)
-            + " mb"
-        )
 
     def get_name_and_path(self, trace):
 
@@ -197,12 +189,12 @@ class AWSdump:
 
             s3_resource = boto3.resource(
                 "s3",
-                region_name=self.aws_cred["AWS_REGION"],
-                aws_access_key_id=self.aws_cred["ACCESS_KEY_ID"],
-                aws_secret_access_key=self.aws_cred["SECRET_ACCESS_KEY"],
+                region_name=os.environ["AWS_REGION"],
+                aws_access_key_id=os.environ["ACCESS_KEY_ID"],
+                aws_secret_access_key=os.environ["SECRET_ACCESS_KEY"],
             )
 
-            s3_resource.Bucket(self.aws_cred["BUCKET_NAME"]).put_object(
+            s3_resource.Bucket(os.environ["BUCKET_NAME"]).put_object(
                 Key=s3_path, Body=open(local_path, "rb")
             )
 
