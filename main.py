@@ -5,6 +5,7 @@ This is the main file that runs the OpenEEW code package
 # import modules
 import time
 from threading import Thread
+import os
 
 from params import params
 from src import data_holders, receive_traces, aws
@@ -20,6 +21,15 @@ __status__ = ""
 
 def main():
     """Does everything"""
+
+    # Create a dictionary of aws credentials from enviroment variables
+
+    aws_cred = {
+        "AWS_REGION": os.environ["AWS_REGION"],
+        "ACCESS_KEY_ID": os.environ["ACCESS_KEY_ID"],
+        "SECRET_ACCESS_KEY": os.environ["SECRET_ACCESS_KEY"],
+        "BUCKET_NAME": os.environ["BUCKET_NAME"],
+    }
 
     # Create a RawData DataFrame.
     traces = data_holders.Traces()
