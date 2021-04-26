@@ -33,5 +33,5 @@ params = {
     "interp_samp": interp_samp,
     "misal_thresh": misal_thresh,
     "export_json": export_json,
-    "export_mseed": export_mseed
+    "export_mseed": export_mseed,
 }

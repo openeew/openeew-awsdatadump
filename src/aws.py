@@ -76,10 +76,10 @@ class AWSdump:
                     self.json2mseed(json_local_path, mseed_local_path)
                     # save mseed to aws
                     self.upload_file_aws(mseed_local_path, mseed_s3_path)
-                
+
                 c = time.time()
 
-                print((c-b, b-a))
+                print((c - b, b - a))
                 # DROP THE DATA FROM THE DATAFRAME
                 self.traces.data = self.traces.data[
                     self.traces.data["device_id"] != device_id
