@@ -1,4 +1,3 @@
-
 import logging
 import boto3
 from botocore.exceptions import ClientError
@@ -13,8 +12,7 @@ import os
 import time
 
 
-class Dump():
-
+class Dump:
     def __init__(self, todo, params):
         """ Initiate the class with the to do list"""
         self.todo = todo
@@ -35,8 +33,8 @@ class Dump():
             url=os.environ["CLOUDANT_URL"],
         )
         self.client.connect()
-        self.ibm_db = self.client[self.params["traces_table_name"]]     
-    
+        self.ibm_db = self.client[self.params["traces_table_name"]]
+
     def dump_data(self):
 
         for index, row in self.todo.data.iterrows():
@@ -48,19 +46,19 @@ class Dump():
                 "cloud_t_start": row["cloud_t_start"],
                 "cloud_t_end": row["cloud_t_end"],
                 "s3_path": row["s3_path"],
-                "trace_length": row["cloud_t_end"]-row["cloud_t_start"],
+                "trace_length": row["cloud_t_end"] - row["cloud_t_start"],
                 "device_id": row["device_id"],
-                "file_type": row["file_type"]
-                }
+                "file_type": row["file_type"],
+            }
 
             self.s3_resource.Bucket(os.environ["BUCKET_NAME"]).put_object(
-                    Key=s3_path, Body=open(local_path, "rb")
-                )
+                Key=s3_path, Body=open(local_path, "rb")
+            )
             self.ibm_db.create_document(ibm_message)
             self.todo.data = self.todo.data.drop(index)
 
             os.remove(local_path)
-            
+
             print("✅ Dumped to ASW and IBM to the cloudant database.")
 
     def run(self):
@@ -68,8 +66,3 @@ class Dump():
         while True:
             self.dump_data()
             time.sleep(self.params["sleep_time"])
-
-
-        
-
-

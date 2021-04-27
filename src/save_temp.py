@@ -1,4 +1,3 @@
-
 import numpy as np
 import datetime
 import math
@@ -58,7 +57,7 @@ class SaveTemp:
                     json_s3_path,
                     mseed_s3_path,
                     json_filename,
-                    mseed_filename
+                    mseed_filename,
                 ) = self.get_name_and_path(trace)
 
                 # save json file locally
@@ -68,27 +67,33 @@ class SaveTemp:
                     # convert json to mseed
                     self.json2mseed(json_local_path, mseed_local_path)
                     # add to to-do list
-                    self.todo.data = self.todo.data.append({
-                        "s3_path": mseed_s3_path,
-                        "local_path": mseed_local_path,
-                        "file_name": mseed_filename,
-                        "cloud_t_start": cloud_t_start,
-                        "cloud_t_end": cloud_t_end,
-                        "device_id": device_id,
-                        "file_type": "mseed"
-                    }, ignore_index=True)
+                    self.todo.data = self.todo.data.append(
+                        {
+                            "s3_path": mseed_s3_path,
+                            "local_path": mseed_local_path,
+                            "file_name": mseed_filename,
+                            "cloud_t_start": cloud_t_start,
+                            "cloud_t_end": cloud_t_end,
+                            "device_id": device_id,
+                            "file_type": "mseed",
+                        },
+                        ignore_index=True,
+                    )
 
                 if self.params["export_json"]:
                     # add to to-do list
-                    self.todo.data = self.todo.data.append({
-                        "s3_path": json_s3_path,
-                        "local_path": json_local_path,
-                        "file_name": json_filename,
-                        "cloud_t_start": cloud_t_start,
-                        "cloud_t_end": cloud_t_end,
-                        "device_id": device_id,
-                        "file_type": "jsonl"
-                    }, ignore_index=True)
+                    self.todo.data = self.todo.data.append(
+                        {
+                            "s3_path": json_s3_path,
+                            "local_path": json_local_path,
+                            "file_name": json_filename,
+                            "cloud_t_start": cloud_t_start,
+                            "cloud_t_end": cloud_t_end,
+                            "device_id": device_id,
+                            "file_type": "jsonl",
+                        },
+                        ignore_index=True,
+                    )
 
                 # DROP THE DATA FROM THE DATAFRAME
                 self.traces.data = self.traces.data[
@@ -132,7 +137,14 @@ class SaveTemp:
         )
         mseed_s3_path = "test_traces/mseed/" + mseed_filename
 
-        return json_local_path, mseed_local_path, json_s3_path, mseed_s3_path, json_filename, mseed_filename
+        return (
+            json_local_path,
+            mseed_local_path,
+            json_s3_path,
+            mseed_s3_path,
+            json_filename,
+            mseed_filename,
+        )
 
     def save_to_jsonl(self, df, json_local_path):
 

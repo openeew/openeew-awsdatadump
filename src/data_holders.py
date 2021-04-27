@@ -29,7 +29,6 @@ class Traces:
         self.data = self.data.append(df_new, ignore_index=True)
 
 
-
 class ToDo:
     """This dataclass holds a reference to the RawData DF in memory."""
 

@@ -37,5 +37,5 @@ params = {
     "export_json": export_json,
     "export_mseed": export_mseed,
     "traces_table_name": traces_table_name,
-    "s3_folder": s3_folder
+    "s3_folder": s3_folder,
 }
