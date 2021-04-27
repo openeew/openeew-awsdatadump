@@ -27,3 +27,12 @@ class Traces:
 
         # append to the data
         self.data = self.data.append(df_new, ignore_index=True)
+
+
+
+class ToDo:
+    """This dataclass holds a reference to the RawData DF in memory."""
+
+    data: pd.DataFrame = pd.DataFrame()
+
+    print("✅ Created empty to-do dataframe.")
