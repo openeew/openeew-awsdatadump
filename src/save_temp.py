@@ -121,8 +121,8 @@ class SaveTemp:
             + ".MSEED"
         )
 
-        json_local_path = "./tmp/jsonl/" + device_id
-        mseed_local_path = "./tmp/mseed/" + device_id
+        json_local_path = "./tmp/jsonl/" + device_id + "_" + json_filename
+        mseed_local_path = "./tmp/mseed/" + device_id + "_" + mseed_filename
 
         json_s3_path = (
             self.params["s3_folder"]

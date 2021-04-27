@@ -40,6 +40,16 @@ def run():
             clientid=os.environ["MQTT_CLIENTID"] + "m",
         )
 
+    elif params["MQTT"] == "custom":
+        # create a client
+        client = create_client(
+            host=os.environ["CUS_MQTT_HOST"],
+            port=int(os.environ["CUS_MQTT_PORT"]),
+            username=os.environ["CUS_MQTT_USERNAME"],
+            password=os.environ["CUS_MQTT_PASSWORD"],
+            clientid=os.environ["CUS_MQTT_CLIENTID"] + "m"
+        )
+
     topic = "iot-2/type/OpenEEW/id/000000000000/evt/trace/fmt/json"
 
     publish_jsonl(client, topic)

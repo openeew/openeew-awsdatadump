@@ -6,7 +6,7 @@ This file sets parameters used in data dump OpenEEW algorithm
 network = "MX"
 
 # MQTT
-MQTT = "local"  # local or IBM
+MQTT = "custom"  # local, custom or IBM
 
 # PARAMETERS
 max_gap = 10  # maximum gap in data
@@ -15,7 +15,7 @@ sleep_time = 1  # the saving algorithm is goinng to sleep for this ammount of ti
 # EXPORT PARAMS
 export_json = True
 path_in_json = "./tmp/jsonl/"
-export_mseed = True
+export_mseed = False
 path_in_mseed = "./tmp/mseed/"
 interp_samp = 0  # 0: Do not interpolate, n: interpolate n samples, -1: interpolate ALL overlapping samples
 misal_thresh = (
