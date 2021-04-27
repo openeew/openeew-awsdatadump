@@ -50,7 +50,7 @@ class DataReceiver:
                 port=int(os.environ["CUS_MQTT_PORT"]),
                 username=os.environ["CUS_MQTT_USERNAME"],
                 password=os.environ["CUS_MQTT_PASSWORD"],
-                clientid=os.environ["CUS_MQTT_CLIENTID"] + "trace"
+                clientid=os.environ["CUS_MQTT_CLIENTID"] + "trace",
             )
 
         client.loop_forever()
