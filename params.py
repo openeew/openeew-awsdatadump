@@ -6,7 +6,7 @@ This file sets parameters used in data dump OpenEEW algorithm
 network = "MX"
 
 # MQTT
-MQTT = "local"  # local or IBM
+MQTT = "local"  # local, custom or IBM
 
 # PARAMETERS
 max_gap = 10  # maximum gap in data
@@ -21,6 +21,8 @@ interp_samp = 0  # 0: Do not interpolate, n: interpolate n samples, -1: interpol
 misal_thresh = (
     0.5  # 0: do no align samples, 0.5: align all samples with sub-sample time shift​
 )
+traces_table_name = "openeew-traces"
+s3_folder = "test_traces"
 
 
 params = {
@@ -34,4 +36,6 @@ params = {
     "misal_thresh": misal_thresh,
     "export_json": export_json,
     "export_mseed": export_mseed,
+    "traces_table_name": traces_table_name,
+    "s3_folder": s3_folder,
 }

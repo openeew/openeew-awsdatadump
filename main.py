@@ -8,7 +8,7 @@ from threading import Thread
 import os
 
 from params import params
-from src import data_holders, receive_traces, aws
+from src import data_holders, receive_traces, save_temp, dump_aws_ibm
 
 __author__ = "Vaclav Kuna"
 __copyright__ = ""
@@ -22,31 +22,29 @@ __status__ = ""
 def main():
     """Does everything"""
 
-    # Create a dictionary of aws credentials from enviroment variables
-
-    aws_cred = {
-        "AWS_REGION": os.environ["AWS_REGION"],
-        "ACCESS_KEY_ID": os.environ["ACCESS_KEY_ID"],
-        "SECRET_ACCESS_KEY": os.environ["SECRET_ACCESS_KEY"],
-        "BUCKET_NAME": os.environ["BUCKET_NAME"],
-    }
-
     # Create a RawData DataFrame.
     traces = data_holders.Traces()
+    todo = data_holders.ToDo()
 
     # We create and start our traces update worker
     stream = receive_traces.DataReceiver(df_holder=traces, params=params)
     receive_data_process = Thread(target=stream.run)
     receive_data_process.start()
 
-    # We create and start detection worker
-    compute = aws.AWSdump(traces=traces, params=params)
-    aws_process = Thread(target=compute.run)
-    aws_process.start()
+    # We create and start temporary save
+    compute = save_temp.SaveTemp(traces=traces, todo=todo, params=params)
+    tmp_process = Thread(target=compute.run)
+    tmp_process.start()
+
+    # We create and start dumper to AWS and IBM
+    dump = dump_aws_ibm.Dump(todo=todo, params=params)
+    dump_process = Thread(target=dump.run)
+    dump_process.start()
 
     # We join our Threads, i.e. we wait for them to finish before continuing
     receive_data_process.join()
-    aws_process.join()
+    tmp_process.join()
+    dump_process.join()
 
 
 if __name__ == "__main__":

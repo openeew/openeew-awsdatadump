@@ -1,8 +1,3 @@
-"""
-Event module
-"""
-
-# Import modules
 import numpy as np
 import datetime
 import math
@@ -14,18 +9,15 @@ import ast
 from warnings import warn
 import os
 
-import logging
-import boto3
-from botocore.exceptions import ClientError
 
-
-class AWSdump:
+class SaveTemp:
     """This class handles all the detection procedures"""
 
-    def __init__(self, traces, params) -> None:
+    def __init__(self, traces, todo, params) -> None:
         super().__init__()
         self.traces = traces
         self.params = params
+        self.todo = todo
 
     def dump_data(self):
 
@@ -54,32 +46,55 @@ class AWSdump:
                 # data to save
                 trace = self.traces.data[self.traces.data["device_id"] == device_id]
 
+                # for to-do list
+                cloud_t_start = trace["cloud_t"].min()
+                cloud_t_end = trace["cloud_t"].max()
+
                 # get paths and filenames
                 (
                     json_local_path,
                     mseed_local_path,
                     json_s3_path,
                     mseed_s3_path,
+                    json_filename,
+                    mseed_filename,
                 ) = self.get_name_and_path(trace)
 
-                a = time.time()
-                if self.params["export_json"]:
-                    print(device_id)
-                    # save json file locally
-                    self.save_to_jsonl(trace, json_local_path)
-                    # save json to aws
-                    self.upload_file_aws(json_local_path, json_s3_path)
-                b = time.time()
+                # save json file locally
+                self.save_to_jsonl(trace, json_local_path)
 
                 if self.params["export_mseed"]:
                     # convert json to mseed
                     self.json2mseed(json_local_path, mseed_local_path)
-                    # save mseed to aws
-                    self.upload_file_aws(mseed_local_path, mseed_s3_path)
+                    # add to to-do list
+                    self.todo.data = self.todo.data.append(
+                        {
+                            "s3_path": mseed_s3_path,
+                            "local_path": mseed_local_path,
+                            "file_name": mseed_filename,
+                            "cloud_t_start": cloud_t_start,
+                            "cloud_t_end": cloud_t_end,
+                            "device_id": device_id,
+                            "file_type": "mseed",
+                        },
+                        ignore_index=True,
+                    )
 
-                c = time.time()
+                if self.params["export_json"]:
+                    # add to to-do list
+                    self.todo.data = self.todo.data.append(
+                        {
+                            "s3_path": json_s3_path,
+                            "local_path": json_local_path,
+                            "file_name": json_filename,
+                            "cloud_t_start": cloud_t_start,
+                            "cloud_t_end": cloud_t_end,
+                            "device_id": device_id,
+                            "file_type": "jsonl",
+                        },
+                        ignore_index=True,
+                    )
 
-                print((c - b, b - a))
                 # DROP THE DATA FROM THE DATAFRAME
                 self.traces.data = self.traces.data[
                     self.traces.data["device_id"] != device_id
@@ -91,13 +106,12 @@ class AWSdump:
         timestamp = datetime.datetime.utcfromtimestamp(trace_start)
 
         year = str(timestamp.year)
-        hour = str(timestamp.hour)
-        minute = str(timestamp.minute)
-        second = str(timestamp.second)
-        jd = f"{timestamp.timetuple().tm_yday:03d}"
+        hour = str(timestamp.hour).zfill(2)
+        minute = str(timestamp.minute).zfill(2)
+        jd = f"{timestamp.timetuple().tm_yday:03d}".zfill(3)
         device_id = trace["device_id"].iloc[0]
 
-        json_filename = "hr" + hour + "_min" + minute + "_sec" + second + ".jsonl"
+        json_filename = "hr" + hour + "_min" + minute + ".jsonl"
         mseed_filename = (
             self.params["network"]
             + "."
@@ -107,11 +121,12 @@ class AWSdump:
             + ".MSEED"
         )
 
-        json_local_path = "./tmp/jsonl/" + json_filename
-        mseed_local_path = "./tmp/mseed/" + mseed_filename
+        json_local_path = "./tmp/jsonl/" + device_id + "_" + json_filename
+        mseed_local_path = "./tmp/mseed/" + device_id + "_" + mseed_filename
 
         json_s3_path = (
-            "test_traces/json/dev"
+            self.params["s3_folder"]
+            + "/json/dev"
             + device_id
             + "/yr"
             + year
@@ -122,7 +137,14 @@ class AWSdump:
         )
         mseed_s3_path = "test_traces/mseed/" + mseed_filename
 
-        return json_local_path, mseed_local_path, json_s3_path, mseed_s3_path
+        return (
+            json_local_path,
+            mseed_local_path,
+            json_s3_path,
+            mseed_s3_path,
+            json_filename,
+            mseed_filename,
+        )
 
     def save_to_jsonl(self, df, json_local_path):
 
@@ -178,30 +200,6 @@ class AWSdump:
         st = st.split()  # do not return a masked array
 
         st.write(mseed_local_path, format="MSEED")
-
-    def upload_file_aws(self, local_path, s3_path):
-        """Upload a file to an S3 bucket
-
-        :return: True if file was uploaded, else False
-        """
-
-        try:
-
-            s3_resource = boto3.resource(
-                "s3",
-                region_name=os.environ["AWS_REGION"],
-                aws_access_key_id=os.environ["ACCESS_KEY_ID"],
-                aws_secret_access_key=os.environ["SECRET_ACCESS_KEY"],
-            )
-
-            s3_resource.Bucket(os.environ["BUCKET_NAME"]).put_object(
-                Key=s3_path, Body=open(local_path, "rb")
-            )
-
-        except ClientError as e:
-            logging.error(e)
-            return False
-        return True
 
     def run(self):
         # run loop indefinitely
