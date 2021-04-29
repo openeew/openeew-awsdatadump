@@ -6,7 +6,7 @@ This file sets parameters used in data dump OpenEEW algorithm
 network = "MX"
 
 # MQTT
-MQTT = "custom"  # local, custom or IBM
+MQTT = "local"  # local, custom or IBM
 
 # PARAMETERS
 max_gap = 10  # maximum gap in data
