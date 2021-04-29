@@ -48,7 +48,7 @@ def run():
             username=os.environ["CUS_MQTT_USERNAME"],
             password=os.environ["CUS_MQTT_PASSWORD"],
             clientid=os.environ["CUS_MQTT_CLIENTID"] + "m",
-            cafile=os.environ["CUS_MQTT_CERT"]
+            cafile=os.environ["CUS_MQTT_CERT"],
         )
 
     topic = "iot-2/type/OpenEEW/id/000000000000/evt/trace/fmt/json"
