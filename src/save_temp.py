@@ -40,8 +40,11 @@ class SaveTemp:
                 "cloud_t"
             ].iloc[-1]
 
+            # get the signal length
+            num_of_sec = len(self.traces.data[self.traces.data["device_id"] == device_id]["cloud_t"])
+
             # if the last sample is older that max_gap
-            if self.params["max_gap"] < (cloud_t - last_sample):
+            if (self.params["max_gap"] < (cloud_t - last_sample)) or (num_of_sec >= self.params["max_len"]):
 
                 # data to save
                 trace = self.traces.data[self.traces.data["device_id"] == device_id]

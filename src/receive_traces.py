@@ -51,7 +51,7 @@ class DataReceiver:
                 username=os.environ["CUS_MQTT_USERNAME"],
                 password=os.environ["CUS_MQTT_PASSWORD"],
                 clientid=os.environ["CUS_MQTT_CLIENTID"] + "trace",
-                cafile=os.environ["CUS_MQTT_CERT"],
+                # cafile=os.environ["CUS_MQTT_CERT"],
             )
 
         client.loop_forever()
