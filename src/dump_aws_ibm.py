@@ -14,7 +14,7 @@ import time
 
 class Dump:
     def __init__(self, todo, params):
-        """ Initiate the class with the to do list"""
+        """Initiate the class with the to do list"""
         self.todo = todo
         self.params = params
 
@@ -37,7 +37,9 @@ class Dump:
 
     def dump_data(self):
 
-        for index, row in self.todo.data.iterrows():
+        for _, row in self.todo.data.iterrows():
+
+            print(row["local_path"])
 
             s3_path = row["s3_path"]
             local_path = row["local_path"]
@@ -55,9 +57,10 @@ class Dump:
                 Key=s3_path, Body=open(local_path, "rb")
             )
             self.ibm_db.create_document(ibm_message)
-            self.todo.data = self.todo.data.drop(index)
 
             os.remove(local_path)
+
+            self.todo.data = self.todo.data[self.todo.data["local_path"] != local_path]
 
             print("✅ Dumped to ASW and IBM to the cloudant database.")
 
