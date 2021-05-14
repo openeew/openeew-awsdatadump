@@ -50,7 +50,7 @@ class DataReceiver:
                 port=int(os.environ["CUS_MQTT_PORT"]),
                 username=os.environ["CUS_MQTT_USERNAME"],
                 password=os.environ["CUS_MQTT_PASSWORD"],
-                clientid=os.environ["CUS_MQTT_CLIENTID"] + "trace",
+                clientid=os.environ["CUS_MQTT_CLIENTID"] + "trace_sub",
                 # cafile=os.environ["CUS_MQTT_CERT"],
             )
 
@@ -94,10 +94,10 @@ class DataReceiver:
             self.df_holder.update(data, cloud_t)
 
             # Print the current size of the data buffer
-            print(
-                "▫️ Size of data in the buffer "
-                + str(int(sys.getsizeof(self.df_holder.data) / 1e5) / 10)
-                + " mb"
-            )
+            # print(
+            #     "▫️ Size of data in the buffer "
+            #     + str(int(sys.getsizeof(self.df_holder.data) / 1e5) / 10)
+            #     + " mb"
+            # )
         except BaseException as exception:
             print(exception)
