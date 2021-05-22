@@ -75,7 +75,7 @@ class DataReceiver:
         """Upon connecting to an MQTT server, subscribe to the topic
         The production topic is 'iot-2/type/OpenEEW/id/+/evt/trace/fmt/json'"""
 
-        topic = "iot-2/type/OpenEEW/id/+/evt/status/fmt/json" 
+        topic = "iot-2/type/OpenEEW/id/+/evt/status/fmt/json"
         client.subscribe(topic)
 
         print(f"✅ Subscribed to sensor data with result code {resultcode}")
