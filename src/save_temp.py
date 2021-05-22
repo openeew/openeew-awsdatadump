@@ -157,6 +157,7 @@ class SaveTemp:
 
         with open(json_local_path, "w") as outfile:
             for _, entry in df.iterrows():
+
                 json.dump(json.loads(entry.to_json()), outfile)
                 outfile.write("\n")
 
