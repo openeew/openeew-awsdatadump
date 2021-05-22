@@ -16,11 +16,11 @@ class Traces:
 
     def update(self, data, cloud_t):
 
-        data = json.loads(data)
-        data["cloud_t"] = cloud_t
-        data["x"] = [data["x"]]
-        data["y"] = [data["y"]]
-        data["z"] = [data["z"]]
+        device_id = data["device_id"]
+        traces = [{"x": data["traces"][0]["x"], "y": data["traces"][0]["y"], "z": data["traces"][0]["z"]}]
+        sr = 31.25
+
+        data = {"device_id": device_id, "traces": [traces], "sr": sr, "cloud_t": cloud_t}
 
         # create a df
         df_new = pd.DataFrame(data)

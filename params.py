@@ -2,16 +2,14 @@
 This file sets parameters used in data dump OpenEEW algorithm
 """
 
-# NETWORK
-network = "MX"
-
 # MQTT
-MQTT = "custom"  # local, custom or IBM
+MQTT = "IBM"  # local, custom or IBM
 
 # PARAMETERS
 max_gap = 10  # maximum gap in data
 max_len = 600  # maximum signal length in seconds
 sleep_time = 1  # the saving algorithm is goinng to sleep for this ammount of time
+network = "OE"
 
 # EXPORT PARAMS
 export_json = True

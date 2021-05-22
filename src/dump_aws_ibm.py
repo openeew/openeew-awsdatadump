@@ -39,8 +39,6 @@ class Dump:
 
         for _, row in self.todo.data.iterrows():
 
-            print(row["local_path"])
-
             s3_path = row["s3_path"]
             local_path = row["local_path"]
             ibm_message = {
@@ -62,7 +60,11 @@ class Dump:
 
             self.todo.data = self.todo.data[self.todo.data["local_path"] != local_path]
 
-            print("✅ Dumped to ASW and IBM to the cloudant database.")
+            print(
+                "✅ Dumped "
+                + row["device_id"]
+                + " data to ASW and IBM to the cloudant database."
+            )
 
     def run(self):
         # run loop indefinitely

@@ -30,7 +30,7 @@ class DataReceiver:
                 port=int(os.environ["MQTT_PORT"]),
                 username=os.environ["MQTT_USERNAME"],
                 password=os.environ["MQTT_PASSWORD"],
-                clientid=os.environ["MQTT_CLIENTID"] + "trace",
+                clientid=os.environ["MQTT_CLIENTID"] + "trace_subb",
             )
 
         elif self.params["MQTT"] == "local":
@@ -50,7 +50,7 @@ class DataReceiver:
                 port=int(os.environ["CUS_MQTT_PORT"]),
                 username=os.environ["CUS_MQTT_USERNAME"],
                 password=os.environ["CUS_MQTT_PASSWORD"],
-                clientid=os.environ["CUS_MQTT_CLIENTID"] + "trace_sub",
+                clientid=os.environ["CUS_MQTT_CLIENTID"] + "trace_subb",
                 # cafile=os.environ["CUS_MQTT_CERT"],
             )
 
@@ -75,9 +75,10 @@ class DataReceiver:
         """Upon connecting to an MQTT server, subscribe to the topic
         The production topic is 'iot-2/type/OpenEEW/id/+/evt/trace/fmt/json'"""
 
-        topic = "iot-2/type/OpenEEW/id/+/evt/trace/fmt/json"
-        print(f"✅ Subscribed to sensor data with result code {resultcode}")
+        topic = "iot-2/type/OpenEEW/id/+/evt/status/fmt/json" 
         client.subscribe(topic)
+
+        print(f"✅ Subscribed to sensor data with result code {resultcode}")
 
     def on_message(self, client, userdata, message):
         """When a message is sent to a subscribed topic,
