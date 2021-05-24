@@ -19,6 +19,12 @@ class SaveTemp:
         self.params = params
         self.todo = todo
 
+        if os.path.exists(params["path_in_json"]) == False:
+            os.makedirs(params["path_in_json"])
+
+        if os.path.exists(params["path_in_mseed"]) == False:
+            os.makedirs(params["path_in_mseed"])
+
     def dump_data(self):
 
         # get timestamp for the received trace
