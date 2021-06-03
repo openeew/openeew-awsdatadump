@@ -2,7 +2,6 @@
 
 import json
 import glob
-from argparse import ArgumentParser
 from paho.mqtt.client import Client as MqttClient
 
 import pandas as pd
@@ -14,7 +13,7 @@ import os, sys, inspect
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-from params import params
+from params import params  # pylint: disable=import-error
 
 
 def run():
