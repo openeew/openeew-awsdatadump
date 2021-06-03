@@ -25,5 +25,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v2
-      - run: pip install black
+        with:
+          python-version: '3.8'
+      - run: pip install -r requirements.txt
+      - run: pip install black==21.5b2
       - run: black --check --verbose .
