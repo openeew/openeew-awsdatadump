@@ -1,13 +1,7 @@
-import logging
 import boto3
-from botocore.exceptions import ClientError
 
 from cloudant.client import Cloudant
-from cloudant.error import CloudantException
-from cloudant.result import Result, ResultByKey
-from cloudant.database import CloudantDatabase
 
-import pandas as pd
 import os
 import time
 
