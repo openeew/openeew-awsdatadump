@@ -2,10 +2,7 @@
 This is the main file that runs the OpenEEW code package
 """
 
-# import modules
-import time
 from threading import Thread
-import os
 
 from params import params
 from src import data_holders, receive_traces, save_temp, dump_aws_ibm
