@@ -9,8 +9,7 @@ import time
 import datetime
 import os
 
-
-def run(datapath):
+def run():
     """Main method that creates client and executes the rest of the script"""
 
     # create a client

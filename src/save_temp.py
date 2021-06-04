@@ -1,10 +1,8 @@
 import numpy as np
 import datetime
-import math
 import time
 import json
 from obspy import Stream, Trace, UTCDateTime
-from glob import glob
 import ast
 from warnings import warn
 import os
