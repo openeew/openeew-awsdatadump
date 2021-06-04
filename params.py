@@ -2,9 +2,6 @@
 This file sets parameters used in data dump OpenEEW algorithm
 """
 
-# MQTT
-MQTT = "IBM"  # local, custom or IBM
-
 # PARAMETERS
 max_gap = 10  # maximum gap in data
 max_len = 600  # maximum signal length in seconds
@@ -26,7 +23,6 @@ s3_folder = "test_traces"
 
 
 params = {
-    "MQTT": MQTT,
     "max_gap": max_gap,
     "max_len": max_len,
     "sleep_time": sleep_time,
