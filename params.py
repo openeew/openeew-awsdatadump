@@ -13,7 +13,8 @@ export_json = True
 path_in_json = "./tmp/jsonl/"
 export_mseed = False
 path_in_mseed = "./tmp/mseed/"
-interp_samp = 0  # 0: Do not interpolate, n: interpolate n samples, -1: interpolate ALL overlapping samples
+# 0: Do not interpolate, n: interpolate n samples, -1: interpolate ALL overlapping samples
+interp_samp = 0
 misal_thresh = (
     0.5  # 0: do no align samples, 0.5: align all samples with sub-sample time shift​
 )
