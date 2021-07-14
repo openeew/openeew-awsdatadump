@@ -1,5 +1,13 @@
 from dataclasses import dataclass
 import pandas as pd
+import logging
+
+
+log_format = (
+    "%(asctime)s - module:%(module)s - line:%(lineno)s - %(levelname)s - %(message)s"
+)
+logging.basicConfig(format=log_format)
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -8,7 +16,7 @@ class Traces:
 
     data: pd.DataFrame = pd.DataFrame()
 
-    print("✅ Created empty dataframe for sensor data.")
+    logging.info("✅ Created empty dataframe for sensor data.")
 
     def update(self, data, cloud_t):
 
@@ -41,4 +49,4 @@ class ToDo:
 
     data: pd.DataFrame = pd.DataFrame()
 
-    print("✅ Created empty to-do dataframe.")
+    logging.info("✅ Created empty to-do dataframe.")
