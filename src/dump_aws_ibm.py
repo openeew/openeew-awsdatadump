@@ -5,27 +5,37 @@ from cloudant.client import Cloudant
 import os
 import time
 
+import logging
+
 
 class Dump:
+    log_format = "%(asctime)s - module:%(module)s - line:%(lineno)s - %(levelname)s - %(message)s"
+    logging.basicConfig(format=log_format)
+    logger = logging.getLogger(__name__)
+
     def __init__(self, todo, params):
         """Initiate the class with the to do list"""
         self.todo = todo
         self.params = params
 
         # initialize AWS
-        self.s3_resource = boto3.resource(
-            "s3",
-            region_name=os.environ["AWS_REGION"],
-            aws_access_key_id=os.environ["ACCESS_KEY_ID"],
-            aws_secret_access_key=os.environ["SECRET_ACCESS_KEY"],
-        )
+        try:
+            self.s3_resource = boto3.resource(
+                "s3",
+                region_name=os.environ["AWS_REGION"],
+                aws_access_key_id=os.environ["ACCESS_KEY_ID"],
+                aws_secret_access_key=os.environ["SECRET_ACCESS_KEY"],
+            )
 
-        # initialize IBM
-        self.client = Cloudant(
-            os.environ["CLOUDANT_USERNAME"],
-            os.environ["CLOUDANT_PASSWORD"],
-            url=os.environ["CLOUDANT_URL"],
-        )
+            # initialize IBM
+            self.client = Cloudant(
+                os.environ["CLOUDANT_USERNAME"],
+                os.environ["CLOUDANT_PASSWORD"],
+                url=os.environ["CLOUDANT_URL"],
+            )
+        except KeyError as error:
+            self.logger.error(error)
+
         self.client.connect()
         self.ibm_db = self.client[self.params["traces_table_name"]]
 
@@ -54,7 +64,7 @@ class Dump:
 
             self.todo.data = self.todo.data[self.todo.data["local_path"] != local_path]
 
-            print(
+            self.logger.info(
                 "✅ Dumped "
                 + row["device_id"]
                 + " data to ASW and IBM to the cloudant database."
